@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>App Cliente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/cliente.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "XXX",
+      authDomain: "body-mind-revolution.firebaseapp.com",
+      databaseURL: "https://body-mind-revolution.firebaseio.com",
+      projectId: "body-mind-revolution",
+      storageBucket: "body-mind-revolution.appspot.com",
+      messagingSenderId: "XXX",
+      appId: "XXX"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</head>
+<body>
+  <header class="cliente-header">
+    <h1>La tua scheda di oggi</h1>
+  </header>
+
+  <main class="cliente-main">
+    <section id="client-exercises" class="client-exercises"></section>
+  </main>
+
+  <script>
+    const container = document.getElementById("client-exercises");
+
+    firebase.database().ref("exercises").once("value").then(snap => {
+      const data = snap.val() || {};
+      container.innerHTML = "";
+      Object.keys(data).forEach(id => {
+        const ex = data[id];
+        const div = document.createElement("div");
+        div.className = "client-ex-item";
+        div.innerHTML = `
+          <h3>${ex.name}</h3>
+          <button onclick="location.href='exercise.html?ex=${encodeURIComponent(ex.slug)}'">
+            Avvia esercizio
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
