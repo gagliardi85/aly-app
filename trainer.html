@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Trainer - Alissa Casagrande</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f8;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* ===== LOGIN ===== */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1B3B6F 0%, #2C5AA0 50%, #1B3B6F 100%);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 28px;
+            padding: 48px 40px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #FF1493;
+            box-shadow: 0 4px 20px rgba(255,20,147,0.3);
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .login-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FF1493;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #FF1493;
+            box-shadow: 0 0 0 3px rgba(255,20,147,0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: #FF1493;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 20px rgba(255,20,147,0.35);
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #e0006e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255,20,147,0.45);
+        }
+
+        .login-error {
+            background: #fff0f8;
+            color: #FF1493;
+            border: 1px solid #ffb3d9;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: #fff;
+            color: #1a1a2e;
+            padding: 12px 24px;
+            box-shadow: 0 2px 0 #FF1493;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #FF1493;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #FF1493;
+        }
+
+        .header-title p {
+            margin: 3px 0 0 0;
+            font-size: 11px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-header {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-archived {
+            background: #FF1493;
+            color: white;
+        }
+
+        .btn-archived:hover {
+            background: #e0006e;
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            background: #fff0f0;
+            color: #dc2626;
+            border: 1.5px solid #dc2626;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* ===== LAYOUT ===== */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #FF1493;
+            padding: 15px 10px;
+            box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+            overflow-y: auto;
+            max-height: calc(100vh - 60px);
+        }
+
+        .sidebar h2 {
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            padding: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+        }
+
+        .sidebar-nav-btn {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255,20,147,0.9), rgba(255,140,0,0.9));
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .sidebar-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255,20,147,0.4);
+        }
+
+        .client-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 320px);
+        }
+
+        .client-item {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            border-left: 4px solid #00CED1;
+        }
+
+        .client-item:hover {
+            transform: translateX(3px);
+            border-color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: white;
+        }
+
+        .client-item.active {
+            background: white;
+            border-left-color: #FF8C00;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            transform: translateX(5px);
+        }
+
+        .client-item h3 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        .client-item p {
+            margin: 0 0 6px 0;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .add-client-btn {
+            width: 100%;
+            background: white;
+            color: #FF1493;
+            border: 2px solid white;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-client-btn:hover {
+            background: #FF1493;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 60px);
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid #f0f0f0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .card-title {
+            font-size: 18px;
+            color: #1a1a2e;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* ===== CLIENT HERO ===== */
+        .client-hero {
+            background: linear-gradient(135deg, #FF1493 0%, #ff6ec7 100%);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .client-hero h2 {
+            font-size: 24px;
+            font-weight: 900;
+            margin: 0 0 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .client-hero p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .client-hero-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .client-hero-actions .btn {
+            background: rgba(255,255,255,0.2) !important;
+            color: white !important;
+            border: 1.5px solid rgba(255,255,255,0.5) !important;
+            backdrop-filter: blur(4px);
+            font-size: 12px;
+            padding: 8px 14px;
+        }
+
+        .client-hero-actions .btn:hover {
+            background: rgba(255,255,255,0.35) !important;
+        }
+
+        /* ===== STATS ===== */
+        .stats-row-trainer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 16px;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .stat-box-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: #FF1493;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-box-label {
+            font-size: 11px;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-fucsia {
+            background: #FF1493 !important;
+            color: white !important;
+            box-shadow: 0 4px 14px rgba(255,20,147,0.3);
+        }
+
+        .btn-fucsia:hover {
+            background: #e0006e !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #10b981 !important;
+            color: white !important;
+        }
+
+        .btn-success:hover {
+            background: #059669 !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #6366f1 !important;
+            color: white !important;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5 !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 16px 28px;
+            font-size: 16px;
+        }
+
+        /* ===== FORM ===== */
+        .form-section {
+            background: #fff5fb;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #ffe0f0;
+        }
+
+        .form-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #FF1493;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ffe0f0;
+        }
+
+        /* ===== PHASE SECTION ===== */
+        .phase-block {
+            background: #fff5fb;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid #FF1493;
+        }
+
+        .phase-section-header {
+            font-size: 15px;
+            font-weight: 700;
+            color: #FF1493;
+            padding: 10px 14px;
+            background: #fff5fb;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #FF1493;
+        }
+
+        .exercise-item {
+            padding: 12px 14px;
+            background: #fff;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            border-left: 3px solid #FF1493;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #FF1493, #ff6ec7);
+            margin: -32px -32px 24px -32px;
+            padding: 24px 32px;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            opacity: 0.8;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-fucsia {
+            background: #fff0f8;
+            color: #FF1493;
+            border: 1px solid #ffb3d9;
+        }
+
+        .badge-info {
+            background: #eff6ff;
+            color: #3b82f6;
+        }
+
+        .badge-warning {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        /* ===== BACKUP FOOTER ===== */
+        .backup-footer {
+            background: #fff;
+            border-top: 2px solid #fff0f8;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .backup-footer h3 {
+            color: #FF1493;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .backup-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .sidebar { width: 240px; }
+            .stats-row-trainer { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; }
+            .sidebar { width: 100%; max-height: 300px; }
+            .content { padding: 15px; }
+            .stats-row-trainer { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { padding: 20px; }
+        }
+
+        @media (max-width: 600px) {
+            .header { padding: 12px 15px; }
+            .sidebar { padding: 12px 8px; }
+            .card { padding: 18px 15px; }
+            .stats-row-trainer { grid-template-columns: 1fr; }
+            .modal-content { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-container" style="display:flex;">
+        <div class="login-card">
+            <img src="images/logo-alissa.png" alt="Logo" class="login-logo">
+            <h1 class="login-title">ALISSA CASAGRANDE</h1>
+            <p class="login-subtitle">Personal Trainer - Mental Coach<br>Body & Mind Revolution</p>
+            
+            <div class="login-error" id="loginError"></div>
+            
+            <form class="login-form" onsubmit="loginTrainer(event)">
+                <div class="form-group">
+                    <label class="form-label">Password Trainer</label>
+                    <input type="password" class="form-control" id="trainerPassword" placeholder="Inserisci password" required>
+                </div>
+                <button type="submit" class="btn-login">🔐 ACCEDI COME TRAINER</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp" style="display: none;">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <span style="font-size: 40px;">💪</span>
+                <div class="header-title">
+                    <h1>ALISSA CASAGRANDE</h1>
+                    <p>Personal Trainer - Mental Coach | Body & Mind Revolution</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-header btn-archived" onclick="showArchivedClients()">📦 Archiviati</button>
+                <button class="btn-header btn-logout" onclick="logoutTrainer()">📤 Esci</button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTAINER -->
+        <div class="main-container">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <button class="sidebar-nav-btn" onclick="showDashboardView()">📊 Dashboard</button>
+                
+                <div style="padding: 0 10px 12px 10px;">
+                    <div style="position: relative;">
+                        <input 
+                            type="text" 
+                            id="clientSearchInput" 
+                            placeholder="Cerca cliente..." 
+                            style="width: 100%; padding: 8px 8px 8px 32px; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; font-size: 13px; background: rgba(255,255,255,0.95);"
+                            onkeyup="searchClients()"
+                        >
+                        <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 16px;">🔍</span>
+                    </div>
+                </div>
+                
+                <h2>I Tuoi Clienti</h2>
+                <ul class="client-list" id="clientList"></ul>
+                
+                <button class="add-client-btn" onclick="showAddClientModal()">➕ Nuovo Cliente</button>
+            </aside>
+
+            <!-- CONTENT -->
+            <main class="content">
+                <div id="clientDetails" style="display: none;"></div>
+            </main>
+        </div>
+
+        <!-- BACKUP FOOTER -->
+        <div class="backup-footer">
+            <h3>📥 Gestione Backup Completo</h3>
+            <div class="backup-actions">
+                <button class="btn btn-success" onclick="exportBackup()">📦 Export Backup</button>
+                <button class="btn btn-primary" onclick="importBackup()">📤 Import Backup</button>
+                <input type="file" id="backupFileInput" accept=".json" style="display: none;" onchange="handleBackupImport(event)">
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADD CLIENT -->
+    <div class="modal" id="addClientModal">
+        <div class="modal-content" style="max-width: 900px; width: 90%; max-height: 90vh; overflow-y: auto; margin: auto;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="clientModalTitle">➕ Nuovo Cliente</h2>
+                <button type="button" class="modal-close" onclick="closeModal('addClientModal')">&times;</button>
+            </div>
+
+            <form id="clientForm" onsubmit="saveClient(event)">
+                <div class="form-section">
+                    <h3 class="form-section-title">👤 Dati Anagrafici</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Nome e Cognome *</label>
+                            <input type="text" class="form-control" name="name" placeholder="Es: Maria Bianchi" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" placeholder="maria@email.com">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">📊 Parametri Fisici</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">Età *</label>
+                            <input type="number" class="form-control" name="age" min="14" max="99" placeholder="35" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Peso (kg) *</label>
+                            <input type="number" class="form-control" name="weight" min="30" max="200" placeholder="65" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Livello *</label>
+                            <select class="form-control" name="level" required>
+                                <option value="">Seleziona...</option>
+                                <option value="principiante">🥋 Principiante</option>
+                                <option value="intermedio">💪 Intermedio</option>
+                                <option value="avanzato">🏆 Avanzato</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">⚠️ Problematiche Fisiche</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px;">
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 8px; cursor: pointer;">
+                            <input type="checkbox" name="problems" value="schiena" style="cursor: pointer;">
+                            <span>🔙 Schiena</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 8px; cursor: pointer;">
+                            <input type="checkbox" name="problems" value="ginocchia" style="cursor: pointer;">
+                            <span>🦵 Ginocchia</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 8px; cursor: pointer;">
+                            <input type="checkbox" name="problems" value="spalla" style="cursor: pointer;">
+                            <span>💪 Spalla</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 8px; cursor: pointer;">
+                            <input type="checkbox" name="problems" value="polso" style="cursor: pointer;">
+                            <span>✋ Polso</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 8px; cursor: pointer;">
+                            <input type="checkbox" name="problems" value="sovrappeso" style="cursor: pointer;">
+                            <span>⚖️ Sovrappeso</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 8px; cursor: pointer;">
+                            <input type="checkbox" name="problems" value="post-parto" style="cursor: pointer;">
+                            <span>👶 Post-parto</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Altre problematiche specifiche (opzionale)</label>
+                        <textarea 
+                            class="form-control" 
+                            name="custom_problems" 
+                            placeholder="Es: male al gomito sinistro, fascite plantare..."
+                            style="min-height: 70px; resize: vertical;"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">🎯 Obiettivi e Preferenze</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">Obiettivo *</label>
+                            <select class="form-control" name="goal" required>
+                                <option value="">Seleziona...</option>
+                                <option value="tonificazione">💪 Tonificazione</option>
+                                <option value="dimagrimento">⚖️ Dimagrimento</option>
+                                <option value="forza">🏋️ Forza</option>
+                                <option value="benessere">🧘 Benessere</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stile Preferito *</label>
+                            <select class="form-control" name="style_preference" required>
+                                <option value="">Seleziona...</option>
+                                <option value="pilates">🧘 Pilates</option>
+                                <option value="cardio">🏃 Cardio</option>
+                                <option value="functional">⚙️ Functional</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Attrezzatura Disponibile *</label>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="checkbox" name="equipment" value="tappetino" style="cursor: pointer;">
+                                <span>🧶 Tappetino</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="checkbox" name="equipment" value="elastici" style="cursor: pointer;">
+                                <span>🔗 Elastici</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="checkbox" name="equipment" value="pesi" style="cursor: pointer;">
+                                <span>⚖️ Pesi</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="checkbox" name="equipment" value="pesi_leggeri" style="cursor: pointer;">
+                                <span>🪶 Pesi leggeri</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="checkbox" name="equipment" value="sbarra" style="cursor: pointer;">
+                                <span>🔝 Sbarra</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                <input type="checkbox" name="equipment" value="nessuna" style="cursor: pointer;">
+                                <span>✋ Nessuna</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">Durata Preferita (min) *</label>
+                            <input type="number" class="form-control" name="duration_preference" min="20" max="90" placeholder="45" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Frequenza Settimanale *</label>
+                            <input type="number" class="form-control" name="frequency" min="1" max="7" placeholder="3" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-success btn-large">✅ SALVA CLIENTE</button>
+                    <button type="button" class="btn" onclick="closeModal('addClientModal')">Annulla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ARCHIVED CLIENTS -->
+    <div class="modal" id="archivedModal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2 class="modal-title">📦 Clienti Archiviati</h2>
+                <button type="button" class="modal-close" onclick="closeModal('archivedModal')">&times;</button>
+            </div>
+            <div id="archivedList" style="max-height: 500px; overflow-y: auto;"></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="closeModal('archivedModal')">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <script src="js/database.js"></script>
+    <script src="js/backup-manager.js"></script>
+    <script src="js/workout-generator.js"></script>
+
+    <script>
+        const TRAINER_PASSWORD = "180305Xs!";
+        let currentClientId = null;
+        let currentPlanId = null;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            let attempts = 0;
+            while (!db || !db._ready) {
+                await new Promise(r => setTimeout(r, 100));
+                attempts++;
+                if (attempts > 50) break;
+            }
+
+            if (sessionStorage.getItem('trainer_logged_in') === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                loadClientList();
+                updateDashboardStats();
+                showDashboardView();
+            }
+        });
+
+        async function loginTrainer(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('trainerPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (password !== TRAINER_PASSWORD) {
+                errorEl.textContent = '❌ Password non corretta';
+                errorEl.style.display = 'block';
+                setTimeout(() => errorEl.style.display = 'none', 3000);
+                return;
+            }
+
+            sessionStorage.setItem('trainer_logged_in', 'true');
+            
+            let attempts = 0;
+            while (!db || !db._ready) {
+                await new Promise(r => setTimeout(r, 100));
+                attempts++;
+                if (attempts > 50) break;
+            }
+
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            loadClientList();
+            updateDashboardStats();
+            showDashboardView();
+        }
+
+        function logoutTrainer() {
+            if (confirm('Uscire dalla dashboard?')) {
+                sessionStorage.removeItem('trainer_logged_in');
+                location.reload();
+            }
+        }
+
+        function loadClientList() {
+            const clients = db.getAllClients();
+            const clientList = document.getElementById('clientList');
+            
+            let html = `
+                <li class="client-item ${!currentClientId ? 'active' : ''}" onclick="showDashboard()" style="background: rgba(255,255,255,0.95); border: 2px solid ${!currentClientId ? 'white' : 'transparent'}; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: #1B3B6F;">📊 Dashboard</h3>
+                    <p style="margin: 4px 0 0 0;">Panoramica attività</p>
+                </li>
+            `;
+            
+            html += clients.map(client => {
+                const stats = db.getClientStats(client.id);
+                const profile = db.getProfileByClientId(client.id);
+                return `
+                    <li class="client-item ${currentClientId === client.id ? 'active' : ''}" onclick="selectClient('${client.id}')">
+                        <h3>${client.name}</h3>
+                        <p>${profile ? profile.level : 'Profilo incompleto'}</p>
+                        <span style="font-size: 11px; color: #999;">📊 ${stats.totalWorkouts} allenamenti</span>
+                    </li>
+                `;
+            }).join('');
+            
+            clientList.innerHTML = html;
+        }
+
+        function searchClients() {
+            const searchTerm = document.getElementById('clientSearchInput').value.toLowerCase().trim();
+            const clients = db.getAllClients();
+            const filtered = clients.filter(c => c.name.toLowerCase().indexOf(searchTerm) !== -1);
+            const clientList = document.getElementById('clientList');
+            
+            let html = `
+                <li class="client-item ${!currentClientId ? 'active' : ''}" onclick="showDashboard()" style="background: rgba(255,255,255,0.95); border: 2px solid ${!currentClientId ? 'white' : 'transparent'}; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: #1B3B6F;">📊 Dashboard</h3>
+                    <p style="margin: 4px 0 0 0;">Panoramica attività</p>
+                </li>
+            `;
+            
+            if (filtered.length === 0 && searchTerm) {
+                html += '<li style="padding: 20px; text-align: center; color: #6b7280;">Nessun cliente trovato</li>';
+            } else {
+                html += filtered.map(client => {
+                    const stats = db.getClientStats(client.id);
+                    const profile = db.getProfileByClientId(client.id);
+                    return `
+                        <li class="client-item ${currentClientId === client.id ? 'active' : ''}" onclick="selectClient('${client.id}')">
+                            <h3>${client.name}</h3>
+                            <p>${profile ? profile.level : 'Profilo incompleto'}</p>
+                            <span style="font-size: 11px; color: #999;">📊 ${stats.totalWorkouts} allenamenti</span>
+                        </li>
+                    `;
+                }).join('');
+            }
+            
+            clientList.innerHTML = html;
+        }
+
+        function selectClient(clientId) {
+            currentClientId = clientId;
+            loadClientList();
+            loadClientDetails(clientId);
+        }
+
+        function showDashboard() {
+            currentClientId = null;
+            document.getElementById('clientDetails').style.display = 'none';
+            loadClientList();
+            updateDashboardStats();
+        }
+
+        function showDashboardView() {
+            currentClientId = null;
+            document.getElementById('clientDetails').innerHTML = `
+                <div class="card" style="text-align: center; padding: 40px;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">📊</div>
+                    <h2 style="color: #1B3B6F; font-size: 24px; margin-bottom: 15px;">Dashboard Trainer</h2>
+                    <p style="color: #6b7280; margin-bottom: 20px;">Seleziona un cliente dalla lista per iniziare</p>
+                </div>
+            `;
+            document.getElementById('clientDetails').style.display = 'block';
+        }
+
+        function updateDashboardStats() {
+            const clients = db.getAllClients();
+            const totalPlans = db.getAllPlans().length;
+            const totalSessions = db.getAllSessions().length;
+            const totalFeedback = db.getAllFeedback().length;
+        }
+
+        function loadClientDetails(clientId) {
+            const client = db.getClientById(clientId);
+            const profile = db.getProfileByClientId(clientId);
+            const plans = db.getPlansByClientId(clientId);
+            const sessions = db.getSessionsByClientId(clientId);
+            const stats = db.getClientStats(clientId);
+
+            if (!profile) {
+                document.getElementById('clientDetails').innerHTML = '<p>Profilo non completo. Modifica cliente.</p>';
+                document.getElementById('clientDetails').style.display = 'block';
+                return;
+            }
+
+            const activePlan = plans.find(p => p.status === 'attiva');
+            const pendingPlan = plans.find(p => p.status === 'in_attesa_approvazione');
+
+            let html = `
+                <div class="client-hero">
+                    <div>
+                        <h2>${client.name}</h2>
+                        <p>📊 ${stats.totalWorkouts} allenamenti | 💬 ${stats.totalFeedback} feedback</p>
+                    </div>
+                    <div class="client-hero-actions">
+                        <button class="btn" onclick="editClient('${client.id}')">✏️ Modifica</button>
+                        <button class="btn" onclick="archiveClientConfirm('${client.id}')" style="background: rgba(220,38,38,0.25) !important; color: #dc2626;">🗑️ Archivia</button>
+                    </div>
+                </div>
+
+                <div class="stats-row-trainer">
+                    <div class="stat-box">
+                        <div class="stat-box-value">${stats.totalWorkouts}</div>
+                        <div class="stat-box-label">Allenamenti</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value">${stats.totalFeedback}</div>
+                        <div class="stat-box-label">Feedback</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value">${stats.totalPlans}</div>
+                        <div class="stat-box-label">Schede</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value">${profile.level}</div>
+                        <div class="stat-box-label">Livello</div>
+                    </div>
+                </div>
+
+                ${pendingPlan ? `
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">⏳ Scheda in Attesa di Approvazione</h2>
+                            <span class="badge badge-warning">Richiede Azione</span>
+                        </div>
+                        <p><strong>${pendingPlan.title}</strong></p>
+                        <p style="color: #888; font-size: 14px; margin: 8px 0;">⏱️ ${pendingPlan.duration} min | 🎯 ${pendingPlan.objective}</p>
+                        <div class="modal-actions" style="margin-top: 16px;">
+                            <button class="btn btn-fucsia" onclick="approvePlanAndSync('${pendingPlan.id}')">✅ APPROVA</button>
+                            <button class="btn btn-primary" onclick="editPlan('${pendingPlan.id}')">✏️ MODIFICA</button>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${activePlan ? `
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">✅ Scheda Attiva</h2>
+                            <span class="badge badge-fucsia">Attiva</span>
+                        </div>
+                        <p><strong>${activePlan.title}</strong></p>
+                        <p style="color: #888; font-size: 14px; margin: 8px 0;">⏱️ ${activePlan.duration} min | 🎯 ${activePlan.objective}</p>
+                        <div class="modal-actions" style="margin-top: 16px;">
+                            <button class="btn btn-primary" onclick="editPlan('${activePlan.id}')">✏️ MODIFICA</button>
+                            <button class="btn btn-success" onclick="sendToClientDirectly('${activePlan.id}')">📤 INVIA AL CLIENTE</button>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🤖 Genera Nuova Scheda AI</h2>
+                    </div>
+                    <p>Il sistema AI creerà una scheda personalizzata per ${client.name}.</p>
+                    <button class="btn btn-fucsia btn-large" onclick="generateWorkout('${client.id}')" style="margin-top: 12px; width: 100%;">
+                        🚀 GENERA SCHEDA AI
+                    </button>
+                </div>
+
+                ${sessions.length > 0 ? `
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">📊 Ultimi Allenamenti</h2>
+                        </div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            ${sessions.slice(-5).reverse().map(s => `
+                                <li style="padding: 12px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between;">
+                                    <div>
+                                        <strong>📅 ${new Date(s.completed_at).toLocaleDateString('it-IT')}</strong>
+                                        <div style="font-size: 12px; color: #888;">⏱️ ${Math.floor(s.duration_actual / 60)} minuti</div>
+                                    </div>
+                                    <span style="font-size: 18px;">✅</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            `;
+
+            document.getElementById('clientDetails').innerHTML = html;
+            document.getElementById('clientDetails').style.display = 'block';
+        }
+
+        function generateWorkout(clientId) {
+            try {
+                const plan = workoutGenerator.generateWorkoutPlan(clientId);
+                alert('✅ Scheda generata!');
+                loadClientDetails(clientId);
+            } catch (error) {
+                alert('❌ Errore: ' + error.message);
+            }
+        }
+
+        async function approvePlanAndSync(planId) {
+            await db.approvePlan(planId);
+            alert('✅ Scheda approvata!');
+            
+            // Força aggiornamento real-time per cliente
+            document.dispatchEvent(new Event('db_updated'));
+            
+            loadClientDetails(currentClientId);
+        }
+
+        async function sendToClientDirectly(planId) {
+            const plan = db.getAllPlans().find(p => p.id === planId);
+            if (!confirm(`Inviare la scheda "${plan.title}" al cliente?`)) return;
+            
+            plan.sent_at = new Date().toISOString();
+            await db.updatePlan(planId, plan);
+            
+            // Força aggiornamento real-time
+            document.dispatchEvent(new Event('db_updated'));
+            
+            alert('✅ Scheda inviata al cliente!');
+            loadClientDetails(currentClientId);
+        }
+
+        function editPlan(planId) {
+            const plan = db.getAllPlans().find(p => p.id === planId);
+            if (!plan) return;
+
+            // Semplice edit inline
+            const exContainer = document.getElementById('clientDetails');
+            
+            const html = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">✏️ Modifica Scheda</h2>
+                    </div>
+                    <div id="editPlanForm"></div>
+                    <div class="modal-actions">
+                        <button class="btn btn-success" onclick="saveEditedPlan('${planId}')">✅ SALVA</button>
+                        <button class="btn" onclick="loadClientDetails('${currentClientId}')">Annulla</button>
+                    </div>
+                </div>
+            `;
+            
+            exContainer.innerHTML = html;
+        }
+
+        async function saveEditedPlan(planId) {
+            const plan = db.getAllPlans().find(p => p.id === planId);
+            plan.updated_at = new Date().toISOString();
+            
+            await db.updatePlan(planId, plan);
+            
+            // Força aggiornamento real-time
+            document.dispatchEvent(new Event('db_updated'));
+            
+            alert('✅ Scheda salvata!');
+            loadClientDetails(currentClientId);
+        }
+
+        function editClient(clientId) {
+            const client = db.getClientById(clientId);
+            const profile = db.getProfileByClientId(clientId);
+            
+            document.getElementById('clientModalTitle').textContent = '✏️ Modifica Cliente';
+            const form = document.getElementById('clientForm');
+            
+            form.elements['name'].value = client.name;
+            form.elements['email'].value = client.email || '';
+            form.elements['age'].value = profile?.age || '';
+            form.elements['weight'].value = profile?.weight || '';
+            form.elements['level'].value = profile?.level || '';
+            form.elements['goal'].value = profile?.goal || '';
+            form.elements['style_preference'].value = profile?.style_preference || '';
+            form.elements['duration_preference'].value = profile?.duration_preference || '';
+            form.elements['frequency'].value = profile?.frequency || '';
+            
+            profile?.problems?.forEach(p => {
+                const cb = form.querySelector(`input[name="problems"][value="${p}"]`);
+                if (cb) cb.checked = true;
+            });
+            
+            profile?.equipment?.forEach(e => {
+                const cb = form.querySelector(`input[name="equipment"][value="${e}"]`);
+                if (cb) cb.checked = true;
+            });
+
+            form.dataset.editingId = clientId;
+            document.getElementById('addClientModal').classList.add('active');
+        }
+
+        async function saveClient(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            const problems = [];
+            formData.getAll('problems').forEach(p => problems.push(p));
+            
+            const equipment = [];
+            formData.getAll('equipment').forEach(e => equipment.push(e));
+            
+            const clientData = {
+                name: formData.get('name'),
+                email: formData.get('email') || ''
+            };
+
+            const profileData = {
+                age: parseInt(formData.get('age')),
+                weight: parseInt(formData.get('weight')),
+                level: formData.get('level'),
+                problems: problems.length > 0 ? problems : ['nessuna'],
+                custom_problems: formData.get('custom_problems') || '',
+                goal: formData.get('goal'),
+                equipment: equipment.length > 0 ? equipment : ['nessuna'],
+                duration_preference: parseInt(formData.get('duration_preference')),
+                style_preference: formData.get('style_preference'),
+                frequency: parseInt(formData.get('frequency'))
+            };
+
+            const editingId = event.target.dataset.editingId;
+            
+            if (editingId) {
+                await db.updateClient(editingId, clientData);
+                await db.updateProfile(editingId, profileData);
+                alert('✅ Cliente aggiornato!');
+            } else {
+                const newClient = await db.addClient(clientData);
+                profileData.client_id = newClient.id;
+                await db.updateProfile(newClient.id, profileData);
+                alert('✅ Cliente creato!');
+            }
+
+            closeModal('addClientModal');
+            loadClientList();
+            if (editingId) loadClientDetails(editingId);
+        }
+
+        async function archiveClientConfirm(clientId) {
+            const client = db.getClientById(clientId);
+            if (confirm(`Archiviare "${client.name}"?`)) {
+                await db.archiveClient(clientId);
+                alert('✅ Cliente archiviato');
+                currentClientId = null;
+                loadClientList();
+                showDashboard();
+            }
+        }
+
+        function showArchivedClients() {
+            const archived = db.getArchivedClients();
+            const list = document.getElementById('archivedList');
+            
+            if (archived.length === 0) {
+                list.innerHTML = '<p style="text-align: center; padding: 40px; color: #6b7280;">Nessun cliente archiviato</p>';
+            } else {
+                list.innerHTML = archived.map(client => `
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="font-size: 16px;">${client.name}</strong>
+                                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
+                                    📅 Archiviato il ${new Date(client.archived_at).toLocaleDateString('it-IT')}
+                                </div>
+                            </div>
+                            <button class="btn btn-success" onclick="restoreClientConfirm('${client.id}')">
+                                ♻️ Ripristina
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('archivedModal').classList.add('active');
+        }
+
+        async function restoreClientConfirm(clientId) {
+            const archived = db.getArchivedClients();
+            const client = archived.find(c => c.id === clientId);
+            if (confirm(`Ripristinare "${client.name}"?`)) {
+                await db.restoreClient(clientId);
+                alert('✅ Cliente ripristinato!');
+                showArchivedClients();
+                loadClientList();
+            }
+        }
+
+        function showAddClientModal() {
+            document.getElementById('clientModalTitle').textContent = '➕ Nuovo Cliente';
+            const form = document.getElementById('clientForm');
+            form.reset();
+            delete form.dataset.editingId;
+            document.getElementById('addClientModal').classList.add('active');
+        }
+
+        function exportBackup() {
+            if (backupManager) {
+                backupManager.exportTrainerBackup();
+            }
+        }
+
+        function importBackup() {
+            document.getElementById('backupFileInput').click();
+        }
+
+        async function handleBackupImport(event) {
+            const file = event.target.files[0];
+            if (file && backupManager) {
+                await backupManager.importTrainerBackup(file);
+            }
+            event.target.value = '';
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
